@@ -58,31 +58,11 @@ deleting `main` on purpose, so the fork's history cannot be lost. GitHub's **Syn
 only works while there are no conflicts; otherwise merge as above.
 
 
-## After a release: update the MCP host's control.json
+## After a release
 
-The Cititec MCP host does not pick up a new release on its own. `/etc/mcp/control.json` on the
-host pins each server's image by digest **and lists every tool the server may expose**. A tool
-that is in the image but not in that list does not appear for anyone.
-
-**Every time a release adds, renames or removes a tool, update `control.json` in the same
-change window**, or the new tool stays invisible (example: Bitdefender's incident and
-quarantine tools, and Datto RMM's `datto_list_device_jobs`, were in the image but missing until
-they were added to the list). On the host (`ssh mcp-admin`):
-
-1. Back up the file: `sudo cp /etc/mcp/control.json /etc/mcp/control.json.bak-$(date +%Y%m%d-%H%M%S)`
-2. Point the service's `image` at the new release's digest (`ghcr.io/cititec-pty-ltd/<server>@sha256:...`,
-   from the GitHub package page or `docker pull` output).
-3. Add new **read-only** tools to the service's `read_tools` list, and tools that change
-   anything to `write_tools` (writes are approval-gated proposals). Remove renamed or deleted
-   tools.
-4. Check the file before anything uses it - a JSON error stops **every** MCP server:
-   `sudo python3 -m json.tool /etc/mcp/control.json > /dev/null && echo "control.json is valid"`
-5. Test the server: `ssh -T mcp-server mcp-<server>`, and check `tools/list` shows the new
-   tools. Existing Claude sessions get "Policy changed; reconnect"; users start a new Claude
-   session to see the new tools.
-
-Also update the `cititec-mcp-servers` skill (Cititec-Pty-Ltd/Cititec, `claude/skills/`) when a
-tool is added or changes behaviour, and upload the new skill zip.
+Adding, renaming or removing a tool also needs a change on Cititec's MCP host, or the new tool
+does not appear for anyone. Follow the internal runbook in the private Cititec-Pty-Ltd/Cititec
+repository (`claude/mcp-host/README.md`), and update the `cititec-mcp-servers` skill there.
 
 ## Protection
 
