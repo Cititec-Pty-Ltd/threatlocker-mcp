@@ -1,3 +1,6 @@
+> **Cititec fork** of [WYRE-AI/threatlocker-mcp](https://github.com/WYRE-AI/threatlocker-mcp). Before changing anything, read
+> [CITITEC-FORK.md](CITITEC-FORK.md): which changes go back to Wyre and which stay in this fork.
+
 # ThreatLocker MCP Server
 
 A Model Context Protocol (MCP) server that provides AI assistants with access to the ThreatLocker Portal API. Manage computers, approval requests, audit logs, and organizations through natural language interactions.
