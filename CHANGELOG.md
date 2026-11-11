@@ -2,6 +2,10 @@
 
 ### Fixed
 
+- (Cititec fork) Depend on `@cititec-pty-ltd/node-threatlocker@^3.0.3` instead of
+  `@wyre-ai/node-threatlocker@^3.0.2`. 3.0.3 sends `organizationId` from
+  `threatlocker_audit_file_history` as `ManagedOrganizationId`, so file history works for
+  computers in child organizations.
 - `threatlocker_audit_search`: `searchText` is now documented as what it is, a file path
   filter sent as ThreatLocker `fullPath` that matches the whole path (full path or `*`
   wildcards). Searching a hostname or a bare file name returned nothing with no hint why.

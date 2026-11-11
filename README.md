@@ -40,7 +40,7 @@ A Model Context Protocol (MCP) server that provides AI assistants with access to
 ### Audit Log
 - `threatlocker_audit_search` - Search audit log entries with filters. `searchText` is a file path filter (ThreatLocker `fullPath`), not free text: give the full path or use `*` wildcards (`*\setup.msi`). Filter by computer with `hostname`. Pass `childOrganizations: true` for computers in child organizations
 - `threatlocker_audit_get` - Get one audit log entry; pass `eActionLogId`, `sourceTableId` and `organizationId` straight from the `threatlocker_audit_search` row (`organizationId` is required for rows from child organizations; deprecated alias: `actionLogId`). HTTP 500 is reported as an actionable error: re-search and pass all three fields from the same row
-- `threatlocker_audit_file_history` - Get audit history for a file. Requires `fullPath` and either `hostname` or `computerId`. For a computer in a child organization also pass `organizationId` (from its `threatlocker_computers_list` row); without it the result is empty. Needs `@wyre-ai/node-threatlocker` with `getFileHistory({ organizationId })` support
+- `threatlocker_audit_file_history` - Get audit history for a file. Requires `fullPath` and either `hostname` or `computerId`. For a computer in a child organization also pass `organizationId` (from its `threatlocker_computers_list` row); without it the result is empty. In this fork the SDK is `@cititec-pty-ltd/node-threatlocker` 3.0.3 or later, which sends `organizationId` as `ManagedOrganizationId`
 
 ### Organizations
 - `threatlocker_organizations_list_children` - List child organizations
