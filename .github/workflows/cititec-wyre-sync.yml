@@ -37,6 +37,9 @@ concurrency:
 env:
   UPSTREAM: https://github.com/WYRE-AI/threatlocker-mcp.git
   RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+  # The checkout has a remote named "upstream" (Wyre). gh prefers a remote with that name, so
+  # without GH_REPO every gh command would target Wyre's repo instead of this fork.
+  GH_REPO: ${{ github.repository }}
 
 jobs:
   sync:
@@ -178,5 +181,5 @@ jobs:
               exit 0
             fi
           fi
-          echo "::error::$title - see the run summary for what to do (Issues are off, so this run fails to notify you)."
+          echo "::error::$title - no issue could be opened, so this run fails to notify you. See the run summary for what to do."
           exit 1
