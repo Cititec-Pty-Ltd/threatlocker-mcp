@@ -2,7 +2,6 @@
 
 ### Added
 
-- Depend on `@cititec-pty-ltd/node-threatlocker@^3.1.0`, which sends the new audit search filters.
 - `threatlocker_audit_search` takes `actionId` (1 Permit, 2 Deny, 3 Deny with option to request,
   6 Ringfenced, 99 Any Deny), `actionType`, `onlyTrueDenies`, `simulateDeny` and `groupBys`, so
   denies can be filtered and counted by cause (for example `actionId: 2, groupBys: [6, 9]` for
@@ -10,13 +9,12 @@
 
 ### Fixed
 
-- (Cititec fork) Depend on `@cititec-pty-ltd/node-threatlocker@^3.0.3` instead of
-  `@wyre-ai/node-threatlocker@^3.0.2`. 3.0.3 sends `organizationId` from
-  `threatlocker_audit_file_history` as `ManagedOrganizationId`, so file history works for
-  computers in child organizations.
-- `threatlocker_audit_search`: `searchText` is now documented as what it is, a file path
-  filter sent as ThreatLocker `fullPath` that matches the whole path (full path or `*`
-  wildcards). Searching a hostname or a bare file name returned nothing with no hint why.
+- (Cititec fork) Depends on `@cititec-pty-ltd/node-threatlocker@^3.1.0`, Cititec's build of the
+  ThreatLocker SDK, instead of `@wyre-ai/node-threatlocker`. Same features as Wyre's 3.1.0 (deny
+  and group-by filters, `getFileHistory({ organizationId })`).
+- `threatlocker_audit_search`: `searchText` is now documented as what it is, a path filter
+  sent as ThreatLocker `fullPath` that matches a whole path (full path or `*` wildcards) -
+  the file path, and also the process path and created-by path of each row. Searching a hostname or a bare file name returned nothing with no hint why.
   New `hostname` parameter filters by computer (the SDK already sent `hostname`; the tool
   did not expose it). `pageSize` description corrected to the real default of 25.
 - `threatlocker_audit_file_history`: new optional `organizationId`, forwarded to
