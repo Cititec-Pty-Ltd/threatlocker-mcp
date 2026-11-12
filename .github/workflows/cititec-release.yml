@@ -60,6 +60,11 @@ jobs:
         run: npm test
 
       - name: semantic-release (tag and GitHub release)
+        id: sr
+        # The release is the tag; a later failure (often @semantic-release/github commenting
+        # on an upstream PR number that does not exist here) must not stop the image build.
+        # The last step fails the run if nothing was released.
+        continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -103,3 +108,15 @@ jobs:
             BUILD_DATE=${{ github.event.head_commit.timestamp }}
             NODE_AUTH_TOKEN=${{ secrets.PACKAGES_READ_TOKEN || secrets.GITHUB_TOKEN }}
             GITHUB_TOKEN=${{ secrets.PACKAGES_READ_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Report a semantic-release failure
+        if: steps.sr.outcome == 'failure'
+        env:
+          VERSION: ${{ steps.tag.outputs.version }}
+        run: |
+          if [ -n "$VERSION" ]; then
+            echo "::warning::semantic-release failed after releasing v$VERSION (usually its PR-comment step, when a merged commit mentions an upstream PR number that does not exist here). The release and the image are fine."
+          else
+            echo "::error::semantic-release failed before releasing - no version was tagged and no image was built. See the semantic-release step log."
+            exit 1
+          fi
