@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+### Fixed
+
+- A ThreatLocker rate limit (HTTP 429) follows the fleet 429 policy via node-threatlocker 3.2.2: it is retried at most once, and only for a `Retry-After` of 10 s or less; otherwise the tool fails at once. The tool error carries `structuredContent: { error_type: "rate_limited", retry_after_seconds: N }` with the same N as `Try again in N s.` in the text (at least 1; 60 without a `Retry-After`).
+
 ### Added
 
 - `threatlocker_audit_search` takes `actionId` (1 Permit, 2 Deny, 3 Deny with option to request,
